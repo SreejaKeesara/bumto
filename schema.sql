@@ -20,7 +20,7 @@ CREATE TABLE school (
 CREATE TABLE competitor (
   student_id int AUTO_INCREMENT,
   student_name varchar(255),
-  school id int,
+  school_id int,
   grad_year int,
   FOREIGN KEY (school_id) references school(school_id),
   CONSTRAINT competitors_pk PRIMARY KEY (student_id)
@@ -40,11 +40,9 @@ CREATE TABLE team (
 	team_id int AUTO_INCREMENT,
 	school_id int,
 	tournament_id int,
-	compete_date date,
 	FOREIGN KEY (school_id) references school(school_id),
 	FOREIGN KEY (tournament_id) references tournament(tournament_id),
-	FOREIGN KEY (compete_date) references tournament(start_date),
-	CONSTRAINT team_pk PRIMARY KEY (team_id, school_id, tournament_id, compete_date)
+	CONSTRAINT team_pk PRIMARY KEY (team_id, school_id, tournament_id)
 );
 
 CREATE TABLE judge (
@@ -71,7 +69,7 @@ CREATE TABLE trial (
 	FOREIGN KEY (judge1) references judge(judge_id),
 	FOREIGN KEY (judge2) references judge(judge_id),
 	CHECK (plaintiff_id != defendant_id),
-	CHECK (judge1 != judge2)
+	CHECK (judge1 != judge2),
 	CONSTRAINT trial_pk PRIMARY KEY (trial_id)
 );
 
@@ -90,6 +88,8 @@ CREATE TABLE comment (
 CREATE TABLE score (
 	student_id int,
 	trial_id int,
+	role enum('Attorney', 'Witness'),
+	role_name varchar(255),
 	score_title varchar(255),
 	score int,
 	judge_id int,
